@@ -47,16 +47,17 @@ public class Controleur extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
                         //Récupère et stock dans un bean, les infos du formulaire de index.jsp
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-
-                    
+                ;
+                
                 String action =  request.getParameter(FORM_ACTION);
+                
+                System.out.println("Action : " +action);
                 if (action == null){
-                    System.out.println("Erreur : action est null");
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
                 }
                 else 
                 switch (action){
-                    case ("Login"):
+                    case "Submit":
                         
                         Statement stmtLogin = DataAccess.DBConnect();
                         ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
@@ -103,6 +104,12 @@ public class Controleur extends HttpServlet {
                         else{             
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
                         }
+                        break;
+                        
+                    default :
+                        this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                        break;
+                     
                 }
             
 
