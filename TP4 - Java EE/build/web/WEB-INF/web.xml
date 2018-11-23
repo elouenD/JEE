@@ -6,7 +6,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Controleur</servlet-name>
-        <url-pattern>/Controleur</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

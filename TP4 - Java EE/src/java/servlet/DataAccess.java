@@ -15,14 +15,13 @@ import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static util.Constants.DB_REQUEST;
 
 /**
  *
  * @author Namko
  */
 class DataAccess {
-        public static ResultSet DBConnect() throws SQLException{
+        public static Statement DBConnect() throws SQLException{
             
             String dbUrl = "";
             String dbUser = "";
@@ -45,7 +44,6 @@ class DataAccess {
             
             Connection dbConn = DriverManager.getConnection(dbUrl, dbUser, dbMdp);
             Statement stmt = dbConn.createStatement();
-            ResultSet rs = stmt.executeQuery(DB_REQUEST);
-            return rs;
+            return stmt;
     }
 }

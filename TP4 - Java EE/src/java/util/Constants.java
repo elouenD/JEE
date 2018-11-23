@@ -10,10 +10,9 @@ package util;
  * @author Namko
  */
 public class Constants {
-    public static final String DATABASE = "jdbc:derby://localhost:1527/BaseTP";
-    public static final String DB_USER = "jee";
-    public static final String DB_PW = "jee";
-    public static final String DB_REQUEST = "SELECT * FROM EMPLOYES";
+
+    public static final String DB_REQUEST_FROM_EMPLOYEES = "SELECT * FROM EMPLOYES";
+    public static final String DB_REQUEST_FROM_DB_USERS = "SELECT * FROM IDENTIFIANTS";
     
     public static final String INDEX_PAGE = "index.jsp";
     public static final String BIENVENUE_PAGE = "bienvenue.jsp";
@@ -21,6 +20,7 @@ public class Constants {
     
     public static final String FORM_LOGIN = "formLogin";
     public static final String FORM_MDP = "formMdp";
+     public static final String FORM_ACTION = "action";
     
     public static final String LOGIN_FROM_DB = "LOGIN";
     public static final String PW_FROM_DB = "MDP";

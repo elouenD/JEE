@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,9 +46,73 @@ public class Controleur extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp                
-            ResultSet rs = DataAccess.DBConnect();
+                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
 
+                    
+                String action =  request.getParameter(FORM_ACTION);
+                if (action == null){
+                    System.out.println("Erreur : action est null");
+                }
+                else 
+                switch (action){
+                    case ("Login"):
+                        
+                        Statement stmtLogin = DataAccess.DBConnect();
+                        ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
+                        Connexion connBeans = new Connexion();
+
+                        while(rsLogin.next()){
+                            connBeans.setDbLogin(rsLogin.getString(LOGIN_FROM_DB));
+                            connBeans.setDbMdp(rsLogin.getString(PW_FROM_DB));           
+                        }
+
+                        Utilisateur user = new Utilisateur();
+                        String login =  request.getParameter(FORM_LOGIN);
+                        String mdp = request.getParameter(FORM_MDP);
+                        
+                        System.out.println("Login : "+login);
+                        if ((login != null)&&(mdp != null)){         
+                            user.setLogin(login);
+                            user.setMdp(mdp);
+                            request.getSession().setAttribute("kUser", user);
+
+                        //boucle for à la place du if, si connBeans contient plusieurs lignes ?
+                            if (user.getLogin().equals(connBeans.getDbLogin())){
+                                //Message erreur Login ?
+                                if (user.getMdp().equals(connBeans.getDbMdp())){
+                                    ArrayList<Employees> ListeEmployes = this.getEmployees();
+                                    request.getSession().setAttribute("kEmployees", ListeEmployes);
+                                    if (!ListeEmployes.isEmpty()){
+                                        //response.sendRedirect(BIENVENUE_PAGE);
+                                        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                                    }
+                                    else {
+                                        System.out.println("La liste des employés est vide...");
+                                    }
+                                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                                }
+                                else{
+                                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                                }
+                            }
+                            else{
+                                this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                            }
+                        }           
+                        else{             
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                        }
+                }
+            
+
+        }
+    }
+    
+    public ArrayList<Employees> getEmployees() throws SQLException{
+            Statement stmt = DataAccess.DBConnect();
+            ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
+            
             ArrayList<Employees> ListeEmployes = new ArrayList();
 
             while(rs.next()){
@@ -63,16 +128,8 @@ public class Controleur extends HttpServlet {
                 emp.setEmpMail(rs.getString(EMP_MAIL_FROM_DB));
                 ListeEmployes.add(emp);
             }
-            System.out.println(ListeEmployes);
-            request.getSession().setAttribute("kEmployees", ListeEmployes);
-            if (!ListeEmployes.isEmpty()){
-                //response.sendRedirect(BIENVENUE_PAGE);
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
-            }
-            else {
-                System.out.println("La liste des employés est vide...");
-            }
-        }
+
+        return ListeEmployes;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
