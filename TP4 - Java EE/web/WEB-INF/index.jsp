@@ -14,12 +14,12 @@
     <body>
         <form method="post" action="Controleur">
             Login:<br>
-            <input type="text" name="action">
+            <input type="text" name="formLogin">
             <br>
             Mot de passe:<br>
-            <input type="text" name="action">
+            <input type="text" name="formMdp">
             <br><br>
-            <input type="submit" value="Submit">
+            <input type="submit" name="action" value="Submit">
         </form> 
             
     </body>
