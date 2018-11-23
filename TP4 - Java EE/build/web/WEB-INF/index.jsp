@@ -9,18 +9,26 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Connexion</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/style.css">
     </head>
     <body>
-        <form method="post" action="Controleur">
-            Login:<br>
-            <input type="text" name="formLogin">
-            <br>
-            Mot de passe:<br>
-            <input type="text" name="formMdp">
-            <br><br>
-            <input type="submit" name="action" value="Submit">
-        </form> 
-            
+        <div class="container h-100">
+            <div class="row h-100 justify-content-center align-items-center">
+                <div class="container col-offset-4 col-4" style="border: rgb(221,221,221) solid 1px; padding: 2px">
+                    <div class=""></div>
+                    <form class="col-12" method="post" action="Controleur">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="formLogin" placeholder="Login">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="formMdp" placeholder="Mot de passe">
+                        </div>
+                        <input type="submit" name="action" value="Submit" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>            
+        </div>
     </body>
 </html>
