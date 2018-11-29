@@ -10,7 +10,6 @@ import fr.efrei.Employees;
 import fr.efrei.Utilisateur;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -46,76 +45,75 @@ public class Controleur extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp
-                ;
-                
+                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp                
                 String action =  request.getParameter(FORM_ACTION);
                 
-                System.out.println("Action : " +action);
                 if (action == null){
                     this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
                 }
-                else 
-                switch (action){
-                    case "Submit":
-                        
-                        Statement stmtLogin = DataAccess.DBConnect();
-                        ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
-                        Connexion connBeans = new Connexion();
+                else{
+                    switch (action){
+                        case "Submit":                      
+                            loginVerification(request, response);
+                            break;
 
-                        while(rsLogin.next()){
-                            connBeans.setDbLogin(rsLogin.getString(LOGIN_FROM_DB));
-                            connBeans.setDbMdp(rsLogin.getString(PW_FROM_DB));           
-                        }
-
-                        Utilisateur user = new Utilisateur();
-                        String login =  request.getParameter(FORM_LOGIN);
-                        String mdp = request.getParameter(FORM_MDP);
-                        
-                        System.out.println("Login : "+login);
-                        if ((login != null)&&(mdp != null)){         
-                            user.setLogin(login);
-                            user.setMdp(mdp);
-                            request.getSession().setAttribute("kUser", user);
-
-                        //boucle for à la place du if, si connBeans contient plusieurs lignes ?
-                            if (user.getLogin().equals(connBeans.getDbLogin())){
-                                //Message erreur Login ?
-                                if (user.getMdp().equals(connBeans.getDbMdp())){
-                                    ArrayList<Employees> ListeEmployes = this.getEmployees();
-                                    request.getSession().setAttribute("kEmployees", ListeEmployes);
-                                    if (!ListeEmployes.isEmpty()){
-                                        //response.sendRedirect(BIENVENUE_PAGE);
-                                        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
-                                    }
-                                    else {
-                                        System.out.println("La liste des employés est vide...");
-                                    }
-                                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
-                                }
-                                else{
-                                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                                }
-                            }
-                            else{
-                                this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                            }
-                        }           
-                        else{             
+                        default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                        }
-                        break;
-                        
-                    default :
-                        this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                        break;
-                     
+                            break;                   
                 }
-            
-
+            }
         }
     }
-    
+    public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        Statement stmtLogin = DataAccess.DBConnect();
+        ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
+        Connexion connBeans = new Connexion();
+        
+        String message;
+
+        while(rsLogin.next()){
+            connBeans.setDbLogin(rsLogin.getString(LOGIN_FROM_DB));
+            connBeans.setDbMdp(rsLogin.getString(PW_FROM_DB));           
+        }
+
+        Utilisateur user = new Utilisateur();
+        String login =  request.getParameter(FORM_LOGIN);
+        String mdp = request.getParameter(FORM_MDP);
+
+        // Vérification de la valeur des champs (si vide/s, message d'erreur)
+        if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
+                message = "Vous n'avez pas rempli tous les champs !";
+                request.setAttribute("kMessage", message);
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                                .forward(request, response);
+        }
+        else {
+            message = "";
+            user.setLogin(login);
+            user.setMdp(mdp);
+            request.getSession().setAttribute("kUser", user);
+
+        //boucle for à la place du if, si connBeans contient plusieurs lignes ?
+            if ( (user.getLogin().equals(connBeans.getDbLogin())) && (user.getMdp().equals(connBeans.getDbMdp())) ){
+                ArrayList<Employees> ListeEmployes = this.getEmployees();
+                request.getSession().setAttribute("kEmployees", ListeEmployes);
+                if (!ListeEmployes.isEmpty()){
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                }
+                else {
+                    System.out.println("La liste des employés est vide...");
+                }
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
+            }
+            else{
+                message = "Erreur d'identifiant ou de mot de passe !";
+                request.setAttribute("kMessage", message);
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                                .forward(request, response);
+            }
+        }
+        request.setAttribute("kMessage", message);
+    }
     public ArrayList<Employees> getEmployees() throws SQLException{
             Statement stmt = DataAccess.DBConnect();
             ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
