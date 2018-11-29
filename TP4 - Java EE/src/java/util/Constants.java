@@ -39,6 +39,9 @@ public class Constants {
     
     public static final String RETURN_TO_LIST_ACTION = "returnToList";
     
+    public static final String GO_TO_DETAILS = "goToDetail";
+    public static final String DELETE = "delete";
+    public static final String GO_TO_ADD = "goToAdd";
     
     
     
@@ -53,6 +56,7 @@ public class Constants {
     public static final String EMP_NAME_FROM_DB = "NOM";
     public static final String EMP_FIRSTNAME_FROM_DB = "PRENOM";
     public static final String EMP_TELDOM_FROM_DB = "TELDOM";
+    public static final String EMP_TELMOB_FROM_DB = "TELPORT";
     public static final String EMP_TELPRO_FROM_DB = "TELPRO";
     public static final String EMP_ADDRESS_FROM_DB = "ADRESSE";
     public static final String EMP_CP_FROM_DB = "CODEPOSTAL";

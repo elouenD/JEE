@@ -46,8 +46,9 @@ public class Controleur extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp                
+                        //RÈcupËre et stock dans un bean, les infos du formulaire de index.jsp                
                 String action =  request.getParameter(FORM_ACTION);
+                System.out.println("action="+action);
                 
                 if (action == null){
                     this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
@@ -57,7 +58,13 @@ public class Controleur extends HttpServlet {
                         case "Submit":                      
                             loginVerification(request, response);
                             break;
-
+                        case "GoToAdd":
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/form_employe.jsp" ).forward( request, response );
+                            break;
+                        case "BackToList":
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                            break;
+                          
                         default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
                             break;                   
@@ -82,7 +89,7 @@ public class Controleur extends HttpServlet {
         String login =  request.getParameter(FORM_LOGIN);
         String mdp = request.getParameter(FORM_MDP);
 
-        // Vérification de la valeur des champs (si vide/s, message d'erreur)
+        // VÈrification de la valeur des champs (si vide/s, message d'erreur)
         if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
                 message = "Vous n'avez pas rempli tous les champs !";
                 request.setAttribute("kMessage", message);
@@ -95,7 +102,7 @@ public class Controleur extends HttpServlet {
             user.setMdp(mdp);
             request.getSession().setAttribute("kUser", user);
 
-        //boucle for à la place du if, si connBeans contient plusieurs lignes ?
+        //boucle for ‡ la place du if, si connBeans contient plusieurs lignes ?
             if ( (user.getLogin().equals(connBeans.getDbLogin())) && (user.getMdp().equals(connBeans.getDbMdp())) ){
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
@@ -103,7 +110,7 @@ public class Controleur extends HttpServlet {
                     this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
                 }
                 else {
-                    System.out.println("La liste des employés est vide...");
+                    System.out.println("La liste des employÈs est vide...");
                 }
                 this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
             }
@@ -129,6 +136,7 @@ public class Controleur extends HttpServlet {
                 emp.setEmpNom(rs.getString(EMP_NAME_FROM_DB));
                 emp.setEmpPrenom(rs.getString(EMP_FIRSTNAME_FROM_DB));
                 emp.setEmpTelDom(rs.getString(EMP_TELDOM_FROM_DB));
+                emp.setEmpTelMob(rs.getString(EMP_TELMOB_FROM_DB));
                 emp.setEmpTelPro(rs.getString(EMP_TELPRO_FROM_DB));
                 emp.setEmpAddress(rs.getString(EMP_ADDRESS_FROM_DB));
                 emp.setEmpCP(rs.getString(EMP_CP_FROM_DB));

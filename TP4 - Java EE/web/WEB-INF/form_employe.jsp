@@ -19,7 +19,7 @@
             <div class="form-group row">
               <label for="nom" class="col-sm-2 col-form-label">Nom</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="nom" name="nomAddEmploye" placeholder="Ex: DURANT" required>
+                <input type="text" class="form-control" id="nom" name="nomAddEmploye" placeholder="Ex: DURANT" >
               </div>
             </div>
             
@@ -27,7 +27,7 @@
             <div class="form-group row">
               <label for="prenom" class="col-sm-2 col-form-label">Prénom</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="prenom" name="prenomAddEmploye" placeholder="Ex: Gilles" required>
+                <input type="text" class="form-control" id="prenom" name="prenomAddEmploye" placeholder="Ex: Gilles" >
               </div>
             </div>
             
@@ -35,7 +35,7 @@
             <div class="form-group row">
               <label for="telDom" class="col-sm-2 col-form-label">Tél Dom</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="telDom" name="telDomAddEmploye" placeholder="Ex: 0156565656" required>
+                <input type="text" class="form-control" id="telDom" name="telDomAddEmploye" placeholder="Ex: 0156565656" >
               </div>
             </div>
             
@@ -43,7 +43,7 @@
             <div class="form-group row">
               <label for="telMob" class="col-sm-2 col-form-label">Tél Mob</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="TelMob" name="telMobAddEmploye" placeholder="Ex: 0645454545" required>
+                <input type="text" class="form-control" id="TelMob" name="telMobAddEmploye" placeholder="Ex: 0645454545" >
               </div>
             </div>
             
@@ -51,7 +51,7 @@
             <div class="form-group row">
               <label for="telPro" class="col-sm-2 col-form-label">Tél Pro</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="telPro" name="telProAddEmploye" placeholder="Ex: 0612121212" required>
+                <input type="text" class="form-control" id="telPro" name="telProAddEmploye" placeholder="Ex: 0612121212" >
               </div>
             </div>
             
@@ -62,7 +62,7 @@
                     <div class="form-group row">
                       <label for="adresse" class="col-sm-2 col-form-label">Adresse</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="adresse" name="adresseAddEmploye" placeholder="123 boulevard..." required>
+                        <input type="text" class="form-control" id="adresse" name="adresseAddEmploye" placeholder="123 boulevard..." >
                       </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="form-group row">
                       <label for="codePostal" class="col-sm-2 col-form-label">Code Postal</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="codePostal" name="codePostalAddEmploye" placeholder="Ex: 75001" required>
+                        <input type="text" class="form-control" id="codePostal" name="codePostalAddEmploye" placeholder="Ex: 75001" >
                       </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="form-group row">
                       <label for="ville" class="col-sm-2 col-form-label">Ville</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="ville" name="villeAddEmploye" placeholder="Ex: Paris" required>
+                        <input type="text" class="form-control" id="ville" name="villeAddEmploye" placeholder="Ex: Paris" >
                       </div>
                     </div>
                 </div>
@@ -95,16 +95,16 @@
                     <div class="form-group row">
                       <label for="email" class="col-sm-2 col-form-label">Email</label>
                       <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" name="emailAddEmploye" placeholder="Ex: gilles@gmail.com" required>
+                        <input type="email" class="form-control" id="email" name="emailAddEmploye" placeholder="Ex: gilles@gmail.com" >
                       </div>
                     </div>
                 </div>
             </div>
             
             <!-- SUBMIT -->
-            <button class="btn btn-primary" name="add" type="submit">Valider</button>
+            <button class="btn btn-primary" name="action" name="Add" type="submit">Valider</button>
             <!-- LISTE -->
-            <button class="btn btn-outline-secondary" name="returnToList" type="button">Voir list</button>
+            <button class="btn btn-outline-secondary" name="action" value="BackToList" type="submit">Voir list</button>
           </form>
         </div>
         

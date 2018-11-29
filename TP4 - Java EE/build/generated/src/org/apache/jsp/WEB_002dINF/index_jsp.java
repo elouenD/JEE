@@ -52,6 +52,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
+<<<<<<< Updated upstream
       out.write("\r\n");
       out.write("\r\n");
       out.write("\r\n");
@@ -120,6 +121,38 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        </form> \r\n");
       out.write("    </body>\r\n");
       out.write("</html>\r\n");
+=======
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write("<html>\n");
+      out.write("    <head>\n");
+      out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+      out.write("        <title>Connexion</title>\n");
+      out.write("        <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">\n");
+      out.write("        <link rel=\"stylesheet\" href=\"/css/style.css\">\n");
+      out.write("    </head>\n");
+      out.write("    <body>\n");
+      out.write("        <div class=\"container h-100\">\n");
+      out.write("            <div class=\"row h-100 justify-content-center align-items-center\">\n");
+      out.write("                <div class=\"container col-offset-4 col-4\" style=\"border: rgb(221,221,221) solid 1px; padding: 2px\">\n");
+      out.write("                    <div class=\"\"></div>\n");
+      out.write("                    <form class=\"col-12\" method=\"post\" action=\"Controleur\">\n");
+      out.write("                        <div class=\"form-group\">\n");
+      out.write("                            <input class=\"form-control\" type=\"text\" name=\"formLogin\" placeholder=\"Login\">\n");
+      out.write("                        </div>\n");
+      out.write("                        <div class=\"form-group\">\n");
+      out.write("                            <input class=\"form-control\" type=\"password\" name=\"formMdp\" placeholder=\"Mot de passe\">\n");
+      out.write("                        </div>\n");
+      out.write("                        <input type=\"submit\" name=\"action\" value=\"Submit\" class=\"btn btn-primary\">\n");
+      out.write("                    </form>\n");
+      out.write("                </div>\n");
+      out.write("            </div>            \n");
+      out.write("        </div>\n");
+      out.write("    </body>\n");
+      out.write("</html>\n");
+>>>>>>> Stashed changes
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

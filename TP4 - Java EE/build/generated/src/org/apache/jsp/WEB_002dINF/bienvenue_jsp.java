@@ -57,6 +57,7 @@ public final class bienvenue_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
+<<<<<<< Updated upstream
       out.write("\r\n");
       out.write("\r\n");
       out.write("\r\n");
@@ -90,6 +91,41 @@ public final class bienvenue_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        </table>\r\n");
       out.write("    </body>\r\n");
       out.write("</html>\r\n");
+=======
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write("<html>\n");
+      out.write("    <head>\n");
+      out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+      out.write("        <title>JSP Page</title>\n");
+      out.write("    </head>\n");
+      out.write("    <body>\n");
+      out.write("        <table>\n");
+      out.write("            <tr>\n");
+      out.write("                <td>ID</td>\n");
+      out.write("                <td>NOM</td>\n");
+      out.write("                <td>PRENOM</td>\n");
+      out.write("                <td>TEL DOM</td>\n");
+      out.write("                <td>TEL PRO</td>\n");
+      out.write("                <td>ADDRESSE</td>\n");
+      out.write("                <td>CP</td>\n");
+      out.write("                <td>VILLE</td>\n");
+      out.write("                <td>MAIL</td>                 \n");
+      out.write("            </tr>\n");
+      out.write("            ");
+      if (_jspx_meth_c_forEach_0(_jspx_page_context))
+        return;
+      out.write("\n");
+      out.write("        </table>\n");
+      out.write("    </body>\n");
+      out.write("</html>\n");
+>>>>>>> Stashed changes
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;
@@ -118,6 +154,7 @@ public final class bienvenue_jsp extends org.apache.jasper.runtime.HttpJspBase
       int _jspx_eval_c_forEach_0 = _jspx_th_c_forEach_0.doStartTag();
       if (_jspx_eval_c_forEach_0 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {
         do {
+<<<<<<< Updated upstream
           out.write(" \r\n");
           out.write("                <tr>\r\n");
           out.write("                    <td>");
@@ -157,6 +194,47 @@ public final class bienvenue_jsp extends org.apache.jasper.runtime.HttpJspBase
             return true;
           out.write("</td>\r\n");
           out.write("                </tr>\r\n");
+=======
+          out.write(" \n");
+          out.write("                <tr>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_0((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_1((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_2((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_3((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_4((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_5((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_6((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_7((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                    <td>");
+          if (_jspx_meth_c_out_8((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_forEach_0, _jspx_page_context, _jspx_push_body_count_c_forEach_0))
+            return true;
+          out.write("</td>\n");
+          out.write("                </tr>\n");
+>>>>>>> Stashed changes
           out.write("            ");
           int evalDoAfterBody = _jspx_th_c_forEach_0.doAfterBody();
           if (evalDoAfterBody != javax.servlet.jsp.tagext.BodyTag.EVAL_BODY_AGAIN)
