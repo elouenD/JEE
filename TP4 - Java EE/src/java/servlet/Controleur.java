@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static util.Constants.*;
 
-
-
 /**
  *
  * @author Namko
@@ -91,7 +89,7 @@ public class Controleur extends HttpServlet {
 
         // VÈrification de la valeur des champs (si vide/s, message d'erreur)
         if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
-                message = "Vous n'avez pas rempli tous les champs !";
+                message = "Vous devez renseigner les deux champs";
                 request.setAttribute("kMessage", message);
                 this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
                                 .forward(request, response);
@@ -115,7 +113,7 @@ public class Controleur extends HttpServlet {
                 this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
             }
             else{
-                message = "Erreur d'identifiant ou de mot de passe !";
+                message = "Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau.";
                 request.setAttribute("kMessage", message);
                 this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
                                 .forward(request, response);
