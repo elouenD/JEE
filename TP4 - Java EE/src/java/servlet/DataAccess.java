@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * @author Namko
  */
 class DataAccess {
-        public static Statement DBConnect() throws SQLException{
+        public static Connection DBConnect() throws SQLException{
             
             String dbUrl = "";
             String dbUser = "";
@@ -43,7 +43,6 @@ class DataAccess {
             dbMdp = prop.getProperty("pwd");
             
             Connection dbConn = DriverManager.getConnection(dbUrl, dbUser, dbMdp);
-            Statement stmt = dbConn.createStatement();
-            return stmt;
+            return dbConn;
     }
 }

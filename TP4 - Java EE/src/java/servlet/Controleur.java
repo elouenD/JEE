@@ -10,6 +10,7 @@ import fr.efrei.Employees;
 import fr.efrei.Utilisateur;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -65,7 +66,8 @@ public class Controleur extends HttpServlet {
         }
     }
     public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        Statement stmtLogin = DataAccess.DBConnect();
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmtLogin = dbConn.createStatement();
         ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
         Connexion connBeans = new Connexion();
         
@@ -115,7 +117,8 @@ public class Controleur extends HttpServlet {
         request.setAttribute("kMessage", message);
     }
     public ArrayList<Employees> getEmployees() throws SQLException{
-            Statement stmt = DataAccess.DBConnect();
+            Connection dbConn = DataAccess.DBConnect();
+            Statement stmt = dbConn.createStatement();
             ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
             
             ArrayList<Employees> ListeEmployes = new ArrayList();
