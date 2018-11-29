@@ -11,16 +11,40 @@ package util;
  */
 public class Constants {
 
+    // DB
     public static final String DB_REQUEST_FROM_EMPLOYEES = "SELECT * FROM EMPLOYES";
     public static final String DB_REQUEST_FROM_DB_USERS = "SELECT * FROM IDENTIFIANTS";
+    public static final String DB_REQUEST_ADD_EMPLOYEE = "INSERT INTO EMPLOYES (NOM,PRENOM,TELDOM,TELPORT,TELPRO,ADRESSE,CODEPOSTAL,VILLE,EMAIL) VALUES ";
     
+    // JSP PAGE
     public static final String INDEX_PAGE = "index.jsp";
     public static final String BIENVENUE_PAGE = "bienvenue.jsp";
     
-    
+    // JSP PAGE NAME
+        // LOGIN FORM
     public static final String FORM_LOGIN = "formLogin";
     public static final String FORM_MDP = "formMdp";
-     public static final String FORM_ACTION = "action";
+    public static final String FORM_ACTION = "action";
+        // ADD FORM
+    public static final String FORM_ADD_NAME = "nomAddEmploye";
+    public static final String FORM_ADD_FIRSTNAME = "prenomAddEmploye";
+    public static final String FORM_ADD_TELHOME = "telDomAddEmploye";
+    public static final String FORM_ADD_TELMOB = "telMobAddEmploye";
+    public static final String FORM_ADD_TELPRO = "telProAddEmploye";
+    public static final String FORM_ADD_ADDRESS = "adresseAddEmploye";
+    public static final String FORM_ADD_POSTAL_CODE = "codePostalAddEmploye";
+    public static final String FORM_ADD_CITY = "villeAddEmploye";
+    public static final String FORM_ADD_EMAIL = "emailAddEmploye";
+    public static final String FORM_ADD_ACTION = "add";
+    
+    public static final String RETURN_TO_LIST_ACTION = "returnToList";
+    
+    
+    
+    
+    
+    
+    
     
     public static final String LOGIN_FROM_DB = "LOGIN";
     public static final String PW_FROM_DB = "MDP";
