@@ -13,7 +13,7 @@ public class Constants {
 
     // DB
     public static final String DB_REQUEST_FROM_EMPLOYEES = "SELECT * FROM EMPLOYES";
-    public static final String DB_REQUEST_FROM_DB_USERS = "SELECT * FROM IDENTIFIANTS";
+    public static final String DB_REQUEST_FROM_DB_USERS = "SELECT * FROM UTILISATEURS";
     public static final String DB_REQUEST_REMOVE_EMPLOYEE = "DELETE FROM EMPLOYES WHERE ID = ?";
     public static final String DB_REQUEST_ADD_EMPLOYEE = "INSERT INTO EMPLOYES (NOM,PRENOM,TELDOM,TELPORT,TELPRO,ADRESSE,CODEPOSTAL,VILLE,EMAIL) VALUES ";
     public static final String DB_REQUEST_DELETE_EMPLOYEE = "DELETE FROM EMPLOYES WHERE ID =";
