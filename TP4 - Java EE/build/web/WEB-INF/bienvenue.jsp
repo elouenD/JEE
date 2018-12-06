@@ -19,6 +19,17 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <h1>Page d'accueil</h1>
+        <%
+            List<Employees> userList = (List<Employees>)session.getAttribute("kEmployees");
+            if(userList.isEmpty()){ %>
+                <div class="error"> 
+                    <h4>Nous devons recruter !</h4>
+                </div>
+            <%
+                //out.print("<td>" + session.getAttribute("empty_list_message") + "</td>");
+            }
+            else { %>
         <form method="post" action="Controleur">
             <table class="table">
                 <thead class="thead-dark">
@@ -36,11 +47,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <%
-                    List<Employees> userList = (List<Employees>)session.getAttribute("kEmployees");
-                    if(userList.isEmpty()){
-                        out.print("<td>" + session.getAttribute("empty_list_message") + "</td>");
-                    } else {
+                    <%
                     for(Employees employe : userList){
                         out.print("<tr><td>" + "<input type='radio' name='employeId' value='"+ employe.getEmpId() +"'>" + "</td>");
                         out.print("<td>" + employe.getEmpNom() + "</td>");
@@ -53,13 +60,16 @@
                         out.print("<td>" + employe.getEmpVille() + "</td>");
                         out.print("<td>" + employe.getEmpMail() + "</td></tr>");
                     }
-                    }
                 %>
                 </tbody>
             </table>
             <button class="btn btn-primary" name="action" value="Delete" type="submit">Supprimer</button>
             <button class="btn btn-primary" name="action" value="Details" type="submit">Details</button>
             <button class="btn btn-outline-secondary" name="action" value="GoToAdd" type="submit">Ajouter</button>
+            <% if(request.getAttribute("kMessage") != null) {%>
+                <div class="error"><%=request.getAttribute("kMessage")%></div>
+            <%}%>
         </form>
+        <% } %>
     </body>
 </html>

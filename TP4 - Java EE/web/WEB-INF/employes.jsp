@@ -29,7 +29,7 @@
                 <c:forEach items="${kEmployees}" var="i">
 
                         <tr>
-                            <td><input type="radio" value="${i.empNom}" name="EmpId"></td>
+                            <td><input type="radio" value="${i.empId}" name="EmpId"></td>
                             <td><c:out value="${i.empNom}"/></td>
                             <td><c:out value="${i.empPrenom}"/></td>
                             <td><c:out value="${i.empTelDom}"/></td>

@@ -62,6 +62,10 @@ public class Controleur extends HttpServlet {
                         case "BackToList":
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
                             break;
+                            
+                        case "Delete":
+                            deleteUser(request, response);
+                            break;
                           
                         default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
@@ -69,6 +73,36 @@ public class Controleur extends HttpServlet {
                 }
             }
         }
+    }
+    
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+        String IdToDelete = request.getParameter("employeId");
+        String message="";
+        
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmtDelete = dbConn.createStatement();
+        int result = stmtDelete.executeUpdate(DB_REQUEST_DELETE_EMPLOYEE + IdToDelete);
+        System.out.println("result : "+result);
+        if (result == 1) {
+            message = "La suppression a réussi !";
+            request.setAttribute("kMessage", message);
+        }
+        else {
+            message = "La suppression a échoué !";
+            request.setAttribute("kMessage", message);
+        }
+        
+        ArrayList<Employees> ListeEmployes = this.getEmployees();
+        request.getSession().setAttribute("kEmployees", ListeEmployes);
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+       /* if (!ListeEmployes.isEmpty()){
+            
+        }
+        else {
+            System.out.println("La liste des employÈs est vide...");
+            message = "Nous devons recruter ! ";
+            request.setAttribute("kMessage", message);
+        }*/
     }
     public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         Connection dbConn = DataAccess.DBConnect();
