@@ -4,6 +4,8 @@
     Author     : Namko
 --%>
 
+<%@page import="fr.efrei.Employees"%>
+<%@page import="java.util.List"%>
 <%@page import="util.Constants"%>
 <%@page import="fr.efrei.Connexion"%>
 <%@page import="fr.efrei.Utilisateur"%>
@@ -13,34 +15,61 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <title>JSP Page</title>
     </head>
     <body>
-        <table>
-            <tr>
-                <td>ID</td>
-                <td>NOM</td>
-                <td>PRENOM</td>
-                <td>TEL DOM</td>
-                <td>TEL PRO</td>
-                <td>ADDRESSE</td>
-                <td>CP</td>
-                <td>VILLE</td>
-                <td>MAIL</td>                 
-            </tr>
-            <c:forEach items="${kEmployees}" var="i"> 
+        <h1>Page d'accueil</h1>
+        <%
+            List<Employees> userList = (List<Employees>)session.getAttribute("kEmployees");
+            if(userList.isEmpty()){ %>
+                <div class="error"> 
+                    <h4>Nous devons recruter !</h4>
+                </div>
+            <%
+                //out.print("<td>" + session.getAttribute("empty_list_message") + "</td>");
+            }
+            else { %>
+        <form method="post" action="Controleur">
+            <table class="table">
+                <thead class="thead-dark">
                 <tr>
-                    <td><c:out value="${i.empId}"/></td>
-                    <td><c:out value="${i.empNom}"/></td>
-                    <td><c:out value="${i.empPrenom}"/></td>
-                    <td><c:out value="${i.empTelDom}"/></td>
-                    <td><c:out value="${i.empTelPro}"/></td>
-                    <td><c:out value="${i.empAddress}"/></td>
-                    <td><c:out value="${i.empCP}"/></td>
-                    <td><c:out value="${i.empVille}"/></td>
-                    <td><c:out value="${i.empMail}"/></td>
+                    <th scope="col">Sél</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prenom</th>
+                    <th scope="col">TelDom</th>
+                    <th scope="col">TelPor</th>
+                    <th scope="col">TelPro</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">CP</th>
+                    <th scope="col">Ville</th>
+                    <th scope="col">Email</th>
                 </tr>
-            </c:forEach>
-        </table>
+                </thead>
+                <tbody>
+                    <%
+                    for(Employees employe : userList){
+                        out.print("<tr><td>" + "<input type='radio' name='employeId' value='"+ employe.getEmpId() +"'>" + "</td>");
+                        out.print("<td>" + employe.getEmpNom() + "</td>");
+                        out.print("<td>" + employe.getEmpPrenom() + "</td>");
+                        out.print("<td>" + employe.getEmpTelDom() + "</td>");
+                        out.print("<td>" + employe.getEmpTelMob()+ "</td>");
+                        out.print("<td>" + employe.getEmpTelPro() + "</td>");
+                        out.print("<td>" + employe.getEmpAddress() + "</td>");
+                        out.print("<td>" + employe.getEmpCP() + "</td>");
+                        out.print("<td>" + employe.getEmpVille() + "</td>");
+                        out.print("<td>" + employe.getEmpMail() + "</td></tr>");
+                    }
+                %>
+                </tbody>
+            </table>
+            <button class="btn btn-primary" name="action" value="Delete" type="submit">Supprimer</button>
+            <button class="btn btn-primary" name="action" value="Details" type="submit">Details</button>
+            <button class="btn btn-outline-secondary" name="action" value="GoToAdd" type="submit">Ajouter</button>
+            <% if(request.getAttribute("kMessage") != null) {%>
+                <div class="error"><%=request.getAttribute("kMessage")%></div>
+            <%}%>
+        </form>
+        <% } %>
     </body>
 </html>

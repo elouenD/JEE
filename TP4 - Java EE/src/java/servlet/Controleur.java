@@ -8,9 +8,12 @@ package servlet;
 import fr.efrei.Connexion;
 import fr.efrei.Employees;
 import fr.efrei.Utilisateur;
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Array;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,8 +25,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static util.Constants.*;
-
-
 
 /**
  *
@@ -46,90 +47,142 @@ public class Controleur extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-
-                    
+                        //RÈcupËre et stock dans un bean, les infos du formulaire de index.jsp                
                 String action =  request.getParameter(FORM_ACTION);
+                System.out.println("action="+action);
+                
                 if (action == null){
-                    System.out.println("Erreur : action est null");
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
                 }
-                else 
-                switch (action){
-                    case ("Login"):
-                        
-                        Statement stmtLogin = DataAccess.DBConnect();
-                        ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
-                        Connexion connBeans = new Connexion();
-
-                        while(rsLogin.next()){
-                            connBeans.setDbLogin(rsLogin.getString(LOGIN_FROM_DB));
-                            connBeans.setDbMdp(rsLogin.getString(PW_FROM_DB));           
-                        }
-
-                        Utilisateur user = new Utilisateur();
-                        String login =  request.getParameter(FORM_LOGIN);
-                        String mdp = request.getParameter(FORM_MDP);
-                        
-                        System.out.println("Login : "+login);
-                        if ((login != null)&&(mdp != null)){         
-                            user.setLogin(login);
-                            user.setMdp(mdp);
-                            request.getSession().setAttribute("kUser", user);
-
-                        //boucle for à la place du if, si connBeans contient plusieurs lignes ?
-                            if (user.getLogin().equals(connBeans.getDbLogin())){
-                                //Message erreur Login ?
-                                if (user.getMdp().equals(connBeans.getDbMdp())){
-                                    ArrayList<Employees> ListeEmployes = this.getEmployees();
-                                    request.getSession().setAttribute("kEmployees", ListeEmployes);
-                                    if (!ListeEmployes.isEmpty()){
-                                        //response.sendRedirect(BIENVENUE_PAGE);
-                                        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
-                                    }
-                                    else {
-                                        System.out.println("La liste des employés est vide...");
-                                    }
-                                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
-                                }
-                                else{
-                                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                                }
-                            }
-                            else{
-                                this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                            }
-                        }           
-                        else{             
+                else{
+                    switch (action){
+                        case "Submit":                      
+                            loginVerification(request, response);
+                            break;
+                        case "GoToAdd":
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/form_employe.jsp" ).forward( request, response );
+                            break;
+                        case "BackToList":
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                            break;
+                            
+                        case "Delete":
+                            deleteUser(request, response);
+                            break;
+                          
+                        default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
-                        }
+                            break;                   
                 }
-            
-
+            }
         }
     }
     
-    public ArrayList<Employees> getEmployees() throws SQLException{
-            Statement stmt = DataAccess.DBConnect();
-            ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
-            
-            ArrayList<Employees> ListeEmployes = new ArrayList();
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+        String IdToDelete = request.getParameter("employeId");
+        String message="";
+        
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmtDelete = dbConn.createStatement();
+        int result = stmtDelete.executeUpdate(DB_REQUEST_DELETE_EMPLOYEE + IdToDelete);
+        System.out.println("result : "+result);
+        if (result == 1) {
+            message = "La suppression a réussi !";
+            request.setAttribute("kMessage", message);
+        }
+        else {
+            message = "La suppression a échoué !";
+            request.setAttribute("kMessage", message);
+        }
+        
+        ArrayList<Employees> ListeEmployes = this.getEmployees();
+        request.getSession().setAttribute("kEmployees", ListeEmployes);
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
 
-            while(rs.next()){
-                Employees emp = new Employees();
-                emp.setEmpId(rs.getInt(EMP_ID_FROM_DB));
-                emp.setEmpNom(rs.getString(EMP_NAME_FROM_DB));
-                emp.setEmpPrenom(rs.getString(EMP_FIRSTNAME_FROM_DB));
-                emp.setEmpTelDom(rs.getString(EMP_TELDOM_FROM_DB));
-                emp.setEmpTelPro(rs.getString(EMP_TELPRO_FROM_DB));
-                emp.setEmpAddress(rs.getString(EMP_ADDRESS_FROM_DB));
-                emp.setEmpCP(rs.getString(EMP_CP_FROM_DB));
-                emp.setEmpVille(rs.getString(EMP_VILLE_FROM_DB));
-                emp.setEmpMail(rs.getString(EMP_MAIL_FROM_DB));
-                ListeEmployes.add(emp);
+    }
+    public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmtLogin = dbConn.createStatement();
+        ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
+        Connexion connBeans = new Connexion();
+        
+        String message;
+
+        while(rsLogin.next()){
+            connBeans.setDbLogin(rsLogin.getString(LOGIN_FROM_DB));
+            connBeans.setDbMdp(rsLogin.getString(PW_FROM_DB));           
+        }
+
+        Utilisateur user = new Utilisateur();
+        String login =  request.getParameter(FORM_LOGIN);
+        String mdp = request.getParameter(FORM_MDP);
+
+        // VÈrification de la valeur des champs (si vide/s, message d'erreur)
+        if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
+                message = "Vous devez renseigner les deux champs";
+                request.setAttribute("kMessage", message);
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                                .forward(request, response);
+        }
+        else {
+            message = "";
+            user.setLogin(login);
+            user.setMdp(mdp);
+            request.getSession().setAttribute("kUser", user);
+
+        //boucle for ‡ la place du if, si connBeans contient plusieurs lignes ?
+            if ( (user.getLogin().equals(connBeans.getDbLogin())) && (user.getMdp().equals(connBeans.getDbMdp())) ){
+                ArrayList<Employees> ListeEmployes = this.getEmployees();
+                request.getSession().setAttribute("kEmployees", ListeEmployes);
+                if (!ListeEmployes.isEmpty()){
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                }
+                else {
+                    System.out.println("La liste des employÈs est vide...");
+                }
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
             }
+            else{
+                message = "Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau.";
+                request.setAttribute("kMessage", message);
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                                .forward(request, response);
+            }
+        }
+        request.setAttribute("kMessage", message);
+    }
+    public ArrayList<Employees> getEmployees() throws SQLException{
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmt = dbConn.createStatement();
+        ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
+
+        ArrayList<Employees> ListeEmployes = new ArrayList();
+
+        while(rs.next()){
+            Employees emp = new Employees();
+            emp.setEmpId(rs.getInt(EMP_ID_FROM_DB));
+            emp.setEmpNom(rs.getString(EMP_NAME_FROM_DB));
+            emp.setEmpPrenom(rs.getString(EMP_FIRSTNAME_FROM_DB));
+            emp.setEmpTelDom(rs.getString(EMP_TELDOM_FROM_DB));
+            emp.setEmpTelPro(rs.getString(EMP_TELPRO_FROM_DB));
+            emp.setEmpAddress(rs.getString(EMP_ADDRESS_FROM_DB));
+            emp.setEmpCP(rs.getString(EMP_CP_FROM_DB));
+            emp.setEmpVille(rs.getString(EMP_VILLE_FROM_DB));
+            emp.setEmpMail(rs.getString(EMP_MAIL_FROM_DB));
+            ListeEmployes.add(emp);
+        }
 
         return ListeEmployes;
+    }
+    
+    public boolean deleteEmployee(int id) {
+        try{
+            Connection dbConn = DataAccess.DBConnect();;
+            PreparedStatement prepared = dbConn.prepareStatement(DB_REQUEST_REMOVE_EMPLOYEE, id);
+            return prepared.execute();
+        } catch(Exception e) {
+            return false;
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

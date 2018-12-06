@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +19,8 @@ import java.util.logging.Logger;
  * @author Namko
  */
 class DataAccess {
-        public static Statement DBConnect() throws SQLException{
+    
+        public static Connection DBConnect() throws SQLException{
             
             String dbUrl = "";
             String dbUser = "";
@@ -41,9 +40,11 @@ class DataAccess {
             dbUrl = prop.getProperty("url");
             dbUser = prop.getProperty("user");
             dbMdp = prop.getProperty("pwd");
-            
+            System.out.println(dbUrl);
+                        System.out.println("COUCOUCOUDCOUOCCOUCU");
+
             Connection dbConn = DriverManager.getConnection(dbUrl, dbUser, dbMdp);
-            Statement stmt = dbConn.createStatement();
-            return stmt;
+            return dbConn;
     }
+        
 }
