@@ -14,3 +14,9 @@ body,html{
 body {
     background-color:red;
 }
+
+.error {
+    color: red;
+    background-color:red;
+
+}

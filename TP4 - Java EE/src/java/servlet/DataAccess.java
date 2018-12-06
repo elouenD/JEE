@@ -40,7 +40,9 @@ class DataAccess {
             dbUrl = prop.getProperty("url");
             dbUser = prop.getProperty("user");
             dbMdp = prop.getProperty("pwd");
-            
+            System.out.println(dbUrl);
+                        System.out.println("COUCOUCOUDCOUOCCOUCU");
+
             Connection dbConn = DriverManager.getConnection(dbUrl, dbUser, dbMdp);
             return dbConn;
     }
