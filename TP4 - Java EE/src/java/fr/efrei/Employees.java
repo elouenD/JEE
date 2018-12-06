@@ -14,6 +14,7 @@ public class Employees {
     private String empNom;
     private String empPrenom;
     private String empTelDom;
+    private String empTelMob;
     private String empTelPro;
     private String empAddress;
     private String empCP;
@@ -50,6 +51,14 @@ public class Employees {
 
     public void setEmpTelDom(String empTelDom) {
         this.empTelDom = empTelDom;
+    }
+    
+    public String getEmpTelMob() {
+        return empTelMob;
+    }
+
+    public void setEmpTelMob(String empTelMob) {
+        this.empTelMob = empTelMob;
     }
 
     public String getEmpTelPro() {

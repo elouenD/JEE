@@ -26,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static util.Constants.*;
 
-
-
 /**
  *
  * @author Namko
@@ -49,8 +47,9 @@ public class Controleur extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-                        //Récupère et stock dans un bean, les infos du formulaire de index.jsp                
+                        //RÈcupËre et stock dans un bean, les infos du formulaire de index.jsp                
                 String action =  request.getParameter(FORM_ACTION);
+                System.out.println("action="+action);
                 
                 if (action == null){
                     this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
@@ -60,7 +59,13 @@ public class Controleur extends HttpServlet {
                         case "Submit":                      
                             loginVerification(request, response);
                             break;
-
+                        case "GoToAdd":
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/form_employe.jsp" ).forward( request, response );
+                            break;
+                        case "BackToList":
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                            break;
+                          
                         default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
                             break;                   
@@ -85,9 +90,9 @@ public class Controleur extends HttpServlet {
         String login =  request.getParameter(FORM_LOGIN);
         String mdp = request.getParameter(FORM_MDP);
 
-        // Vérification de la valeur des champs (si vide/s, message d'erreur)
+        // VÈrification de la valeur des champs (si vide/s, message d'erreur)
         if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
-                message = "Vous n'avez pas rempli tous les champs !";
+                message = "Vous devez renseigner les deux champs";
                 request.setAttribute("kMessage", message);
                 this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
                                 .forward(request, response);
@@ -98,7 +103,7 @@ public class Controleur extends HttpServlet {
             user.setMdp(mdp);
             request.getSession().setAttribute("kUser", user);
 
-        //boucle for à la place du if, si connBeans contient plusieurs lignes ?
+        //boucle for ‡ la place du if, si connBeans contient plusieurs lignes ?
             if ( (user.getLogin().equals(connBeans.getDbLogin())) && (user.getMdp().equals(connBeans.getDbMdp())) ){
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
@@ -106,12 +111,12 @@ public class Controleur extends HttpServlet {
                     this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
                 }
                 else {
-                    System.out.println("La liste des employés est vide...");
+                    System.out.println("La liste des employÈs est vide...");
                 }
                 this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
             }
             else{
-                message = "Erreur d'identifiant ou de mot de passe !";
+                message = "Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau.";
                 request.setAttribute("kMessage", message);
                 this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
                                 .forward(request, response);
