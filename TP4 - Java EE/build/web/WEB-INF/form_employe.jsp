@@ -104,7 +104,8 @@
             <!-- SUBMIT -->
             <button class="btn btn-primary" name="action" name="Add" type="submit">Valider</button>
             <!-- LISTE -->
-            <button class="btn btn-outline-secondary" name="action" value="BackToList" type="submit">Voir list</button>
+            <button class="btn btn-outline-secondary" name="action" value="
+                    " type="submit">Voir list</button>
           </form>
         </div>
         

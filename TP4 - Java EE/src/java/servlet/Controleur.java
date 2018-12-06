@@ -8,10 +8,8 @@ package servlet;
 import fr.efrei.Connexion;
 import fr.efrei.Employees;
 import fr.efrei.Utilisateur;
-import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,6 +67,10 @@ public class Controleur extends HttpServlet {
                         case "Delete":
                             deleteUser(request, response);
                             break;
+                            
+                        case "Details":
+                            getDetailedEmployee(request, response);
+                            break;
                           
                         default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
@@ -78,6 +80,32 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+        String IdDetail = request.getParameter("employeId");
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmtDetail = dbConn.createStatement();
+        ResultSet rsDetail = stmtDetail.executeQuery(DB_REQUEST_DETAILS_EMPLOYEE + IdDetail);
+        
+        Employees employeeDetail = new Employees();
+        
+        while(rsDetail.next()){
+            employeeDetail.setEmpId(rsDetail.getInt("ID"));
+            employeeDetail.setEmpNom(rsDetail.getString("NOM"));
+            employeeDetail.setEmpPrenom(rsDetail.getString("PRENOM"));
+            employeeDetail.setEmpTelDom(rsDetail.getString("TELDOM"));
+            employeeDetail.setEmpTelMob(rsDetail.getString("TELPORT"));
+            employeeDetail.setEmpTelPro(rsDetail.getString("TELPRO"));
+            employeeDetail.setEmpAddress(rsDetail.getString("ADRESSE"));
+            employeeDetail.setEmpCP(rsDetail.getString("CODEPOSTAL"));
+            employeeDetail.setEmpVille(rsDetail.getString("VILLE"));
+            employeeDetail.setEmpMail(rsDetail.getString("EMAIL"));
+        }
+        //request.setAttribute("kEmployees", employeeDetail);
+        request.getSession().setAttribute("kEmployees", employeeDetail);
+        
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee.jsp" ).forward( request, response );
+
+    }
     public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String IdToDelete = request.getParameter("employeId");
         String message="";
@@ -85,7 +113,6 @@ public class Controleur extends HttpServlet {
         Connection dbConn = DataAccess.DBConnect();
         Statement stmtDelete = dbConn.createStatement();
         int result = stmtDelete.executeUpdate(DB_REQUEST_DELETE_EMPLOYEE + IdToDelete);
-        System.out.println("result : "+result);
         if (result == 1) {
             message = "La suppression a réussi !";
             request.setAttribute("kMessage", message);

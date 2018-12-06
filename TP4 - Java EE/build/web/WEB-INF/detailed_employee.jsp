@@ -4,6 +4,7 @@
     Author     : benjamin
 --%>
 
+<%@page import="fr.efrei.Employees"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,13 +14,16 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <% Employees employeeDetail = (Employees)session.getAttribute("kEmployees");
+            System.out.println(employeeDetail.getEmpNom());
+        %>
         <div class="container">
             <form>
             <!-- NOM -->
             <div class="form-group row">
               <label for="nom" class="col-sm-2 col-form-label">Nom</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="nom" name="nomAddEmploye" placeholder="Ex: DURANT" >
+                  <input type="text" class="form-control" id="nom" name="nomAddEmploye" placeholder="<%out.print(employeeDetail.getEmpNom());%>" >
               </div>
             </div>
             
@@ -27,7 +31,7 @@
             <div class="form-group row">
               <label for="prenom" class="col-sm-2 col-form-label">Prénom</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="prenom" name="prenomAddEmploye" placeholder="Ex: Gilles" >
+                <input type="text" class="form-control" id="prenom" name="prenomAddEmploye" placeholder="<%out.print(employeeDetail.getEmpPrenom());%>" >
               </div>
             </div>
             
@@ -35,7 +39,7 @@
             <div class="form-group row">
               <label for="telDom" class="col-sm-2 col-form-label">Tél Dom</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="telDom" name="telDomAddEmploye" placeholder="Ex: 0156565656" >
+                <input type="text" class="form-control" id="telDom" name="telDomAddEmploye" placeholder="<%out.print(employeeDetail.getEmpTelDom());%>" >
               </div>
             </div>
             
@@ -43,7 +47,7 @@
             <div class="form-group row">
               <label for="telMob" class="col-sm-2 col-form-label">Tél Mob</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="TelMob" name="telMobAddEmploye" placeholder="Ex: 0645454545" >
+                <input type="text" class="form-control" id="TelMob" name="telMobAddEmploye" placeholder="<%out.print(employeeDetail.getEmpTelMob());%>" >
               </div>
             </div>
             
@@ -51,7 +55,7 @@
             <div class="form-group row">
               <label for="telPro" class="col-sm-2 col-form-label">Tél Pro</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="telPro" name="telProAddEmploye" placeholder="Ex: 0612121212" >
+                <input type="text" class="form-control" id="telPro" name="telProAddEmploye" placeholder="<%out.print(employeeDetail.getEmpTelPro());%>" >
               </div>
             </div>
             
@@ -62,7 +66,7 @@
                     <div class="form-group row">
                       <label for="adresse" class="col-sm-2 col-form-label">Adresse</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="adresse" name="adresseAddEmploye" placeholder="123 boulevard..." >
+                        <input type="text" class="form-control" id="adresse" name="adresseAddEmploye" placeholder="<%out.print(employeeDetail.getEmpAddress());%>" >
                       </div>
                     </div>
                 </div>
@@ -72,7 +76,7 @@
                     <div class="form-group row">
                       <label for="codePostal" class="col-sm-2 col-form-label">Code Postal</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="codePostal" name="codePostalAddEmploye" placeholder="Ex: 75001" >
+                          <input type="text" class="form-control" id="codePostal" name="codePostalAddEmploye" placeholder="<%out.print(employeeDetail.getEmpCP());%>" >
                       </div>
                     </div>
                 </div>
@@ -85,7 +89,7 @@
                     <div class="form-group row">
                       <label for="ville" class="col-sm-2 col-form-label">Ville</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="ville" name="villeAddEmploye" placeholder="Ex: Paris" >
+                        <input type="text" class="form-control" id="ville" name="villeAddEmploye" placeholder="<%out.print(employeeDetail.getEmpVille());%>" >
                       </div>
                     </div>
                 </div>
@@ -95,17 +99,16 @@
                     <div class="form-group row">
                       <label for="email" class="col-sm-2 col-form-label">Email</label>
                       <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" name="emailAddEmploye" placeholder="Ex: gilles@gmail.com" >
+                        <input type="email" class="form-control" id="email" name="emailAddEmploye" placeholder="<%out.print(employeeDetail.getEmpMail());%>" >
                       </div>
                     </div>
                 </div>
             </div>
             
             <!-- SUBMIT -->
-            <button class="btn btn-primary" name="action" name="Add" type="submit">Valider</button>
+            <button class="btn btn-primary" name="action" value="Modify" type="submit">Modifier</button>
             <!-- LISTE -->
-            <button class="btn btn-outline-secondary" name="action" value="
-                    " type="submit">Voir list</button>
+            <button class="btn btn-outline-secondary" name="action" value="BackToList" type="submit">Voir liste</button>
           </form>
         </div>
         
