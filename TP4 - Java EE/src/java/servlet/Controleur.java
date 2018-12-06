@@ -8,9 +8,12 @@ package servlet;
 import fr.efrei.Connexion;
 import fr.efrei.Employees;
 import fr.efrei.Utilisateur;
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Array;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -95,14 +98,7 @@ public class Controleur extends HttpServlet {
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
         this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
-       /* if (!ListeEmployes.isEmpty()){
-            
-        }
-        else {
-            System.out.println("La liste des employÈs est vide...");
-            message = "Nous devons recruter ! ";
-            request.setAttribute("kMessage", message);
-        }*/
+
     }
     public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         Connection dbConn = DataAccess.DBConnect();
@@ -156,28 +152,37 @@ public class Controleur extends HttpServlet {
         request.setAttribute("kMessage", message);
     }
     public ArrayList<Employees> getEmployees() throws SQLException{
-            Connection dbConn = DataAccess.DBConnect();
-            Statement stmt = dbConn.createStatement();
-            ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
-            
-            ArrayList<Employees> ListeEmployes = new ArrayList();
+        Connection dbConn = DataAccess.DBConnect();
+        Statement stmt = dbConn.createStatement();
+        ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
 
-            while(rs.next()){
-                Employees emp = new Employees();
-                emp.setEmpId(rs.getInt(EMP_ID_FROM_DB));
-                emp.setEmpNom(rs.getString(EMP_NAME_FROM_DB));
-                emp.setEmpPrenom(rs.getString(EMP_FIRSTNAME_FROM_DB));
-                emp.setEmpTelDom(rs.getString(EMP_TELDOM_FROM_DB));
-                emp.setEmpTelMob(rs.getString(EMP_TELMOB_FROM_DB));
-                emp.setEmpTelPro(rs.getString(EMP_TELPRO_FROM_DB));
-                emp.setEmpAddress(rs.getString(EMP_ADDRESS_FROM_DB));
-                emp.setEmpCP(rs.getString(EMP_CP_FROM_DB));
-                emp.setEmpVille(rs.getString(EMP_VILLE_FROM_DB));
-                emp.setEmpMail(rs.getString(EMP_MAIL_FROM_DB));
-                ListeEmployes.add(emp);
-            }
+        ArrayList<Employees> ListeEmployes = new ArrayList();
+
+        while(rs.next()){
+            Employees emp = new Employees();
+            emp.setEmpId(rs.getInt(EMP_ID_FROM_DB));
+            emp.setEmpNom(rs.getString(EMP_NAME_FROM_DB));
+            emp.setEmpPrenom(rs.getString(EMP_FIRSTNAME_FROM_DB));
+            emp.setEmpTelDom(rs.getString(EMP_TELDOM_FROM_DB));
+            emp.setEmpTelPro(rs.getString(EMP_TELPRO_FROM_DB));
+            emp.setEmpAddress(rs.getString(EMP_ADDRESS_FROM_DB));
+            emp.setEmpCP(rs.getString(EMP_CP_FROM_DB));
+            emp.setEmpVille(rs.getString(EMP_VILLE_FROM_DB));
+            emp.setEmpMail(rs.getString(EMP_MAIL_FROM_DB));
+            ListeEmployes.add(emp);
+        }
 
         return ListeEmployes;
+    }
+    
+    public boolean deleteEmployee(int id) {
+        try{
+            Connection dbConn = DataAccess.DBConnect();;
+            PreparedStatement prepared = dbConn.prepareStatement(DB_REQUEST_REMOVE_EMPLOYEE, id);
+            return prepared.execute();
+        } catch(Exception e) {
+            return false;
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  * @author Namko
  */
 class DataAccess {
+    
         public static Connection DBConnect() throws SQLException{
             
             String dbUrl = "";
@@ -43,4 +44,5 @@ class DataAccess {
             Connection dbConn = DriverManager.getConnection(dbUrl, dbUser, dbMdp);
             return dbConn;
     }
+        
 }
