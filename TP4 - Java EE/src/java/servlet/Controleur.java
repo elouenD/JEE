@@ -47,6 +47,7 @@ public class Controleur extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
                         //RÈcupËre et stock dans un bean, les infos du formulaire de index.jsp                
                 String action =  request.getParameter(FORM_ACTION);
+                String IdDetail;
                 System.out.println("action="+action);
                 
                 if (action == null){
@@ -61,15 +62,29 @@ public class Controleur extends HttpServlet {
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/form_employe.jsp" ).forward( request, response );
                             break;
                         case "BackToList":
-                            this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                            getHomePage( request, response );
+                            break;
+                         
+                        case "Add":
+                            addEmploye( request, response );
                             break;
                             
                         case "Delete":
-                            deleteUser(request, response);
+                            IdDetail = request.getParameter("employeId");
+                            if(IdDetail != null){
+                                deleteUser(request, response);
+                            }else{
+                                getHomePage( request, response );
+                            }
                             break;
                             
                         case "Details":
-                            getDetailedEmployee(request, response);
+                            IdDetail = request.getParameter("employeId");
+                            if(IdDetail != null){
+                                getDetailedEmployee(request, response); 
+                            }else{
+                                getHomePage( request, response );
+                            }
                             break;
                           
                         default :
@@ -78,6 +93,64 @@ public class Controleur extends HttpServlet {
                 }
             }
         }
+    }
+    
+    public void getHomePage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+        ArrayList<Employees> ListeEmployes = this.getEmployees();
+        request.getSession().setAttribute("kEmployees", ListeEmployes);
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+    }
+    
+    public void addEmploye(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+        String message;
+        
+        if(checkFormIsFull(request)){
+            try{
+                try{
+                    Connection dbConn = DataAccess.DBConnect();
+                    PreparedStatement prepared;
+                    prepared = dbConn.prepareStatement(DB_REQUEST_ADD_EMPLOYEE);
+                    prepared.setString(1,request.getParameter(FORM_ADD_NAME));
+                    prepared.setString(2,request.getParameter(FORM_ADD_FIRSTNAME));
+                    prepared.setString(3,request.getParameter(FORM_ADD_TELHOME));
+                    prepared.setString(4,request.getParameter(FORM_ADD_TELMOB));
+                    prepared.setString(5,request.getParameter(FORM_ADD_TELPRO));
+                    prepared.setString(6,request.getParameter(FORM_ADD_ADDRESS));
+                    prepared.setString(7,request.getParameter(FORM_ADD_POSTAL_CODE));
+                    prepared.setString(8,request.getParameter(FORM_ADD_CITY));
+                    prepared.setString(9,request.getParameter(FORM_ADD_EMAIL));
+                    prepared.execute();
+                    message = "Employé Ajouté !";
+                }
+                catch(Exception e){
+                    message = "Echec de l'ajout !";
+                }
+                ArrayList<Employees> ListeEmployes = this.getEmployees();
+                request.getSession().setAttribute("kEmployees", ListeEmployes);
+                request.setAttribute("kMessage", message);
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+            } catch(Exception e) {
+                
+            }
+        }else{
+            message = "Merci de remplir tous les champs avant d'ajouter un employé.";
+            request.setAttribute("kMessageAdd", message);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/form_employe.jsp" )
+                            .forward(request, response);
+        }
+    }
+    
+    public Boolean checkFormIsFull(HttpServletRequest request){
+        return  (!request.getParameter(FORM_ADD_NAME).isEmpty() 
+                && !request.getParameter(FORM_ADD_FIRSTNAME).isEmpty()  
+                && !request.getParameter(FORM_ADD_TELHOME).isEmpty()   
+                && !request.getParameter(FORM_ADD_TELMOB).isEmpty()  
+                && !request.getParameter(FORM_ADD_TELPRO).isEmpty()  
+                && !request.getParameter(FORM_ADD_ADDRESS).isEmpty()  
+                && !request.getParameter(FORM_ADD_POSTAL_CODE).isEmpty()  
+                && !request.getParameter(FORM_ADD_CITY).isEmpty()  
+                && !request.getParameter(FORM_ADD_EMAIL).isEmpty()  
+                );
     }
     
     public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
@@ -191,6 +264,7 @@ public class Controleur extends HttpServlet {
             emp.setEmpNom(rs.getString(EMP_NAME_FROM_DB));
             emp.setEmpPrenom(rs.getString(EMP_FIRSTNAME_FROM_DB));
             emp.setEmpTelDom(rs.getString(EMP_TELDOM_FROM_DB));
+            emp.setEmpTelMob(rs.getString(EMP_TELMOB_FROM_DB));
             emp.setEmpTelPro(rs.getString(EMP_TELPRO_FROM_DB));
             emp.setEmpAddress(rs.getString(EMP_ADDRESS_FROM_DB));
             emp.setEmpCP(rs.getString(EMP_CP_FROM_DB));

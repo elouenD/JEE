@@ -14,6 +14,9 @@
     </head>
     <body>
         <div class="container">
+            <% if(request.getAttribute("kMessageAdd") != null) {%>
+                <div class="error" id="errorMessage" style="color: red;text-align: center;margin-top: 20px;"><%=request.getAttribute("kMessageAdd")%></div>
+            <%}%>
             <form>
             <!-- NOM -->
             <div class="form-group row">
@@ -102,10 +105,9 @@
             </div>
             
             <!-- SUBMIT -->
-            <button class="btn btn-primary" name="action" name="Add" type="submit">Valider</button>
+            <button class="btn btn-primary" name="action" value="Add" type="submit">Valider</button>
             <!-- LISTE -->
-            <button class="btn btn-outline-secondary" name="action" value="
-                    " type="submit">Voir list</button>
+            <button class="btn btn-outline-secondary" name="action" value="BackToList" type="submit">Voir list</button>
           </form>
         </div>
         
