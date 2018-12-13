@@ -95,12 +95,28 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    /**
+     * functions who sends the user to "bienvenue.jsp"
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
     public void getHomePage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
         this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
     }
     
+    /**
+     * add employee in the DBB
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
     public void addEmploye(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String message;
         
