@@ -176,7 +176,7 @@ public class Controleur extends HttpServlet {
         //request.setAttribute("kEmployees", employeeDetail);
         request.getSession().setAttribute("kEmployees", employeeDetail);
         
-        this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee.jsp" ).forward( request, response );
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee_v2.jsp" ).forward( request, response );
 
     }
     public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
@@ -197,7 +197,7 @@ public class Controleur extends HttpServlet {
         
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
-        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
 
     }
     public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
@@ -221,7 +221,7 @@ public class Controleur extends HttpServlet {
         if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
                 message = "Vous devez renseigner les deux champs";
                 request.setAttribute("kMessage", message);
-                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index_v2.jsp" )
                                 .forward(request, response);
         }
         else {
@@ -235,17 +235,17 @@ public class Controleur extends HttpServlet {
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
                 if (!ListeEmployes.isEmpty()){
-                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
                 }
                 else {
                     System.out.println("La liste des employÈs est vide...");
                 }
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
+                //this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
             }
             else{
                 message = "Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau.";
                 request.setAttribute("kMessage", message);
-                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index_v2.jsp" )
                                 .forward(request, response);
             }
         }
