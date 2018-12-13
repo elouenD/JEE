@@ -61,7 +61,7 @@ public class Controleur extends HttpServlet {
                 System.out.println("action="+action);
                 
                 if (action == null){
-                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/index_v2.jsp" ).forward( request, response );
                 }
                 else{
                     switch (action){
@@ -69,7 +69,7 @@ public class Controleur extends HttpServlet {
                             loginVerification(request, response);
                             break;
                         case "GoToAdd":
-                            this.getServletContext().getRequestDispatcher( "/WEB-INF/form_employe.jsp" ).forward( request, response );
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/form_employe_v2.jsp" ).forward( request, response );
                             break;
                         case "BackToList":
                             getHomePage( request, response );
@@ -108,11 +108,11 @@ public class Controleur extends HttpServlet {
                             
                         case "Deconnect":
                             request.getSession().setAttribute("kConnect", false);
-                            this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/index_v2.jsp" ).forward( request, response );
                             break;
                           
                         default :
-                            this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/index_v2.jsp" ).forward( request, response );
                             break;                   
                 }
             }
@@ -130,7 +130,7 @@ public class Controleur extends HttpServlet {
     public void getHomePage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ClassNotFoundException{
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
-        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
     }
     
     /**
@@ -157,14 +157,14 @@ public class Controleur extends HttpServlet {
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
                 request.setAttribute("kMessage", message);
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
             } catch(Exception e) {
                 
             }
         }else{
             message = "Merci de remplir tous les champs avant d'ajouter un employé.";
             request.setAttribute("kMessageAdd", message);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/form_employe.jsp" )
+            this.getServletContext().getRequestDispatcher("/WEB-INF/form_employe_v2.jsp" )
                             .forward(request, response);
         }
     }
@@ -176,20 +176,8 @@ public class Controleur extends HttpServlet {
         if(checkFormModIsFull(request)){
             try{
                 try{
-                    Connection dbConn = DataAccess.DBConnect();
-                    PreparedStatement prepared;
-                    prepared = dbConn.prepareStatement(DB_REQUEST_MODIFY_EMPLOYEE);
-                    prepared.setString(1,request.getParameter(FORM_MOD_NAME));
-                    prepared.setString(2,request.getParameter(FORM_MOD_FIRSTNAME));
-                    prepared.setString(3,request.getParameter(FORM_MOD_TELHOME));
-                    prepared.setString(4,request.getParameter(FORM_MOD_TELMOB));
-                    prepared.setString(5,request.getParameter(FORM_MOD_TELPRO));
-                    prepared.setString(6,request.getParameter(FORM_MOD_ADDRESS));
-                    prepared.setString(7,request.getParameter(FORM_MOD_POSTAL_CODE));
-                    prepared.setString(8,request.getParameter(FORM_MOD_CITY));
-                    prepared.setString(9,request.getParameter(FORM_MOD_EMAIL));
-                    prepared.setString(10,idEmploye);
-                    prepared.execute();
+                    entities.Employes em = new Employes(request.getParameter(FORM_ADD_NAME),request.getParameter(FORM_ADD_FIRSTNAME), request.getParameter(FORM_ADD_TELHOME), request.getParameter(FORM_ADD_TELMOB), request.getParameter(FORM_ADD_TELPRO), request.getParameter(FORM_ADD_ADDRESS), parseInt(request.getParameter(FORM_ADD_POSTAL_CODE)), request.getParameter(FORM_ADD_CITY), request.getParameter(FORM_ADD_EMAIL));
+                    employeService.edit(parseInt(idEmploye), em);
                     message = "Employé Modifié !";
                 }
                 catch(Exception e){
@@ -198,14 +186,14 @@ public class Controleur extends HttpServlet {
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
                 request.setAttribute("kMessage", message);
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
             } catch(Exception e) {
                 
             }
         }else{
             message = "Merci de remplir tous les champs avant de modifier un employé.";
             request.setAttribute("kMessageMod", message);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/detailed_employee.jsp" )
+            this.getServletContext().getRequestDispatcher("/WEB-INF/detailed_employee_v2.jsp" )
                             .forward(request, response);
         }
     }
@@ -237,29 +225,25 @@ public class Controleur extends HttpServlet {
     
     public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ClassNotFoundException{
         String IdDetail = request.getParameter("employeId");
-        Connection dbConn = DataAccess.DBConnect();
-        Statement stmtDetail = dbConn.createStatement();
-        ResultSet rsDetail = stmtDetail.executeQuery(DB_REQUEST_DETAILS_EMPLOYEE + IdDetail);
+        entities.Employes e = employeService.find(parseInt(IdDetail));
+       
         
         Employees employeeDetail = new Employees();
+        employeeDetail.setEmpId(e.getId());
+        employeeDetail.setEmpNom(e.getNom());
+        employeeDetail.setEmpPrenom(e.getPrenom());
+        employeeDetail.setEmpTelDom(e.getTeldom());
+        employeeDetail.setEmpTelMob(e.getTelport());
+        employeeDetail.setEmpTelPro(e.getTelpro());
+        employeeDetail.setEmpAddress(e.getAdresse());
+        employeeDetail.setEmpCP(String.valueOf(e.getCodepostal()));
+        employeeDetail.setEmpVille(e.getVille());
+        employeeDetail.setEmpMail(e.getEmail());
         
-        while(rsDetail.next()){
-            employeeDetail.setEmpId(rsDetail.getInt("ID"));
-            employeeDetail.setEmpNom(rsDetail.getString("NOM"));
-            employeeDetail.setEmpPrenom(rsDetail.getString("PRENOM"));
-            employeeDetail.setEmpTelDom(rsDetail.getString("TELDOM"));
-            employeeDetail.setEmpTelMob(rsDetail.getString("TELPORT"));
-            employeeDetail.setEmpTelPro(rsDetail.getString("TELPRO"));
-            employeeDetail.setEmpAddress(rsDetail.getString("ADRESSE"));
-            employeeDetail.setEmpCP(rsDetail.getString("CODEPOSTAL"));
-            employeeDetail.setEmpVille(rsDetail.getString("VILLE"));
-            employeeDetail.setEmpMail(rsDetail.getString("EMAIL"));
-        }
-        //request.setAttribute("kEmployees", employeeDetail);
         request.getSession().setAttribute("kEmployees", employeeDetail);
         request.getSession().setAttribute("employeId", IdDetail);
         
-        this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee.jsp" ).forward( request, response );
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee_v2.jsp" ).forward( request, response );
 
     }
     
@@ -275,21 +259,19 @@ public class Controleur extends HttpServlet {
         String IdToDelete = request.getParameter("employeId");
         String message="";
         
-        Connection dbConn = DataAccess.DBConnect();
-        Statement stmtDelete = dbConn.createStatement();
-        int result = stmtDelete.executeUpdate(DB_REQUEST_DELETE_EMPLOYEE + IdToDelete);
-        if (result == 1) {
-            message = "La suppression a réussi !";
-            request.setAttribute("kMessage", message);
-        }
-        else {
+        
+        try{
+           employeService.remove(parseInt(IdToDelete)); 
+           message = "La suppression a réussi !";
+        }catch(Exception e){
             message = "La suppression a échoué !";
-            request.setAttribute("kMessage", message);
         }
+        request.setAttribute("kMessage", message);
+        
         
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
-        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+        this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
 
     }
     
@@ -322,7 +304,7 @@ public class Controleur extends HttpServlet {
         if (login.trim().isEmpty() || mdp.trim().isEmpty()) {
                 message = "Vous devez renseigner les deux champs";
                 request.setAttribute("kMessage", message);
-                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index_v2.jsp" )
                                 .forward(request, response);
         }
         else {
@@ -337,17 +319,17 @@ public class Controleur extends HttpServlet {
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
                 if (!ListeEmployes.isEmpty()){
-                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+                    this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );
                 }
                 else {
                     System.out.println("La liste des employÈs est vide...");
                 }
-                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );                              
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue_v2.jsp" ).forward( request, response );                              
             }
             else{
                 message = "Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau.";
                 request.setAttribute("kMessage", message);
-                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp" )
+                this.getServletContext().getRequestDispatcher("/WEB-INF/index_v2.jsp" )
                                 .forward(request, response);
             }
         }
