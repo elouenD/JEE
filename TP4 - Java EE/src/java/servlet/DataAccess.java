@@ -25,12 +25,12 @@ class DataAccess {
          * @return
          * @throws SQLException 
          */
-        public static Connection DBConnect() throws SQLException{
+        public static Connection DBConnect() throws SQLException, ClassNotFoundException{
             
             String dbUrl = "";
             String dbUser = "";
             String dbMdp = "";
-            
+            Class.forName("com.mysql.jdbc.Driver");
             Properties prop = new Properties();
             InputStream input = null;
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

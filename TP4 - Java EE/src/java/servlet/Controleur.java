@@ -5,11 +5,13 @@
  */
 package servlet;
 
+import entities.Employes;
 import fr.efrei.Connexion;
 import fr.efrei.Employees;
 import fr.efrei.Utilisateur;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,10 +20,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import services.service.EmployesFacadeREST;
+import services.service.IdentifiantsFacadeREST;
 import static util.Constants.*;
 
 /**
@@ -29,6 +34,11 @@ import static util.Constants.*;
  * @author Namko
  */
 public class Controleur extends HttpServlet {
+    
+    @EJB
+    private EmployesFacadeREST employeService;
+    private IdentifiantsFacadeREST identifiantService;
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,7 +51,7 @@ public class Controleur extends HttpServlet {
      * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -117,7 +127,7 @@ public class Controleur extends HttpServlet {
      * @throws ServletException
      * @throws IOException 
      */
-    public void getHomePage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+    public void getHomePage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ClassNotFoundException{
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
         this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
@@ -137,19 +147,8 @@ public class Controleur extends HttpServlet {
         if(checkFormAddIsFull(request)){
             try{
                 try{
-                    Connection dbConn = DataAccess.DBConnect();
-                    PreparedStatement prepared;
-                    prepared = dbConn.prepareStatement(DB_REQUEST_ADD_EMPLOYEE);
-                    prepared.setString(1,request.getParameter(FORM_ADD_NAME));
-                    prepared.setString(2,request.getParameter(FORM_ADD_FIRSTNAME));
-                    prepared.setString(3,request.getParameter(FORM_ADD_TELHOME));
-                    prepared.setString(4,request.getParameter(FORM_ADD_TELMOB));
-                    prepared.setString(5,request.getParameter(FORM_ADD_TELPRO));
-                    prepared.setString(6,request.getParameter(FORM_ADD_ADDRESS));
-                    prepared.setString(7,request.getParameter(FORM_ADD_POSTAL_CODE));
-                    prepared.setString(8,request.getParameter(FORM_ADD_CITY));
-                    prepared.setString(9,request.getParameter(FORM_ADD_EMAIL));
-                    prepared.execute();
+                    entities.Employes e = new Employes(request.getParameter(FORM_ADD_NAME),request.getParameter(FORM_ADD_FIRSTNAME), request.getParameter(FORM_ADD_TELHOME), request.getParameter(FORM_ADD_TELMOB), request.getParameter(FORM_ADD_TELPRO), request.getParameter(FORM_ADD_ADDRESS), parseInt(request.getParameter(FORM_ADD_POSTAL_CODE)), request.getParameter(FORM_ADD_CITY), request.getParameter(FORM_ADD_EMAIL));
+                    employeService.create(e);
                     message = "Employé Ajouté !";
                 }
                 catch(Exception e){
@@ -235,7 +234,8 @@ public class Controleur extends HttpServlet {
                 && !request.getParameter(FORM_MOD_EMAIL).isEmpty()  
                 );
     }
-    public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+    
+    public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ClassNotFoundException{
         String IdDetail = request.getParameter("employeId");
         Connection dbConn = DataAccess.DBConnect();
         Statement stmtDetail = dbConn.createStatement();
@@ -271,7 +271,7 @@ public class Controleur extends HttpServlet {
      * @throws ServletException
      * @throws IOException 
      */
-    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ClassNotFoundException{
         String IdToDelete = request.getParameter("employeId");
         String message="";
         
@@ -301,7 +301,7 @@ public class Controleur extends HttpServlet {
      * @throws ServletException
      * @throws IOException 
      */
-    public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+    public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException, ClassNotFoundException {
         Connection dbConn = DataAccess.DBConnect();
         Statement stmtLogin = dbConn.createStatement();
         ResultSet rsLogin = stmtLogin.executeQuery(DB_REQUEST_FROM_DB_USERS);
@@ -359,7 +359,7 @@ public class Controleur extends HttpServlet {
      * @return employees array list
      * @throws SQLException 
      */
-    public ArrayList<Employees> getEmployees() throws SQLException{
+    public ArrayList<Employees> getEmployees() throws SQLException, ClassNotFoundException{
         Connection dbConn = DataAccess.DBConnect();
         Statement stmt = dbConn.createStatement();
         ResultSet rs = stmt.executeQuery(DB_REQUEST_FROM_EMPLOYEES);
