@@ -6,8 +6,8 @@
 package util;
 
 /**
- *
- * @author Namko
+ * 
+ * @author elouen
  */
 public class Constants {
 

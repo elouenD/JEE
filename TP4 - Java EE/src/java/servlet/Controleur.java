@@ -109,12 +109,28 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    /**
+     * functions who sends the user to "bienvenue.jsp"
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
     public void getHomePage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         ArrayList<Employees> ListeEmployes = this.getEmployees();
         request.getSession().setAttribute("kEmployees", ListeEmployes);
         this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
     }
     
+    /**
+     * add one employee in the DBB
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
     public void addEmploye(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String message;
         
@@ -154,6 +170,7 @@ public class Controleur extends HttpServlet {
         }
     }
     
+<<<<<<< HEAD
     public void modEmploye(HttpServletRequest request, HttpServletResponse response, String idEmploye) throws SQLException, ServletException, IOException{
         String message;
         
@@ -195,6 +212,14 @@ public class Controleur extends HttpServlet {
     }
     
     public Boolean checkFormAddIsFull(HttpServletRequest request){
+=======
+    /**
+     * check if the form to add employee is full
+     * @param request
+     * @return true if all the fields are not empty
+     */
+    public Boolean checkFormIsFull(HttpServletRequest request){
+>>>>>>> project-V1
         return  (!request.getParameter(FORM_ADD_NAME).isEmpty() 
                 && !request.getParameter(FORM_ADD_FIRSTNAME).isEmpty()  
                 && !request.getParameter(FORM_ADD_TELHOME).isEmpty()   
@@ -207,6 +232,7 @@ public class Controleur extends HttpServlet {
                 );
     }
     
+<<<<<<< HEAD
     public Boolean checkFormModIsFull(HttpServletRequest request){
         return  (!request.getParameter(FORM_MOD_NAME).isEmpty() 
                 && !request.getParameter(FORM_MOD_FIRSTNAME).isEmpty()  
@@ -220,6 +246,16 @@ public class Controleur extends HttpServlet {
                 );
     }
     
+=======
+    /**
+     * return one employee details
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
+>>>>>>> project-V1
     public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String IdDetail = request.getParameter("employeId");
         Connection dbConn = DataAccess.DBConnect();
@@ -247,6 +283,15 @@ public class Controleur extends HttpServlet {
         this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee.jsp" ).forward( request, response );
 
     }
+    
+    /**
+     * delete one user in the DB
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
     public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String IdToDelete = request.getParameter("employeId");
         String message="";
@@ -268,6 +313,15 @@ public class Controleur extends HttpServlet {
         this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
 
     }
+    
+    /**
+     * check for the authenfication
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException 
+     */
     public void loginVerification(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         Connection dbConn = DataAccess.DBConnect();
         Statement stmtLogin = dbConn.createStatement();
@@ -320,6 +374,12 @@ public class Controleur extends HttpServlet {
         }
         request.setAttribute("kMessage", message);
     }
+    
+    /**
+     * 
+     * @return employees array list
+     * @throws SQLException 
+     */
     public ArrayList<Employees> getEmployees() throws SQLException{
         Connection dbConn = DataAccess.DBConnect();
         Statement stmt = dbConn.createStatement();
@@ -345,6 +405,11 @@ public class Controleur extends HttpServlet {
         return ListeEmployes;
     }
     
+    /**
+     * delete one employee in the DB
+     * @param id
+     * @return true if the delete is done
+     */
     public boolean deleteEmployee(int id) {
         try{
             Connection dbConn = DataAccess.DBConnect();;
