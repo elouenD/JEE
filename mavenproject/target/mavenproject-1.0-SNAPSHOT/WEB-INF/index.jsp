@@ -31,9 +31,9 @@
                     </form>
                 </div>
             </div>
-            <c:if test="${kMessage != null}">
-                <div class="error" id="errorMessage" style="color: red;text-align: center;margin-top: 20px;"><c:out value="${kMessage}"/></div>
-            </c:if>
+        <% if(request.getAttribute("kMessage") != null) {%>
+            <div class="error" id="errorMessage" style="color: red;text-align: center;margin-top: 20px;"><%=request.getAttribute("kMessage")%></div>
+        <%}%>
         </div>
     </body>
 </html>
