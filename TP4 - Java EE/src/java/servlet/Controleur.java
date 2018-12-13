@@ -170,7 +170,7 @@ public class Controleur extends HttpServlet {
         }
     }
     
-<<<<<<< HEAD
+
     public void modEmploye(HttpServletRequest request, HttpServletResponse response, String idEmploye) throws SQLException, ServletException, IOException{
         String message;
         
@@ -212,14 +212,6 @@ public class Controleur extends HttpServlet {
     }
     
     public Boolean checkFormAddIsFull(HttpServletRequest request){
-=======
-    /**
-     * check if the form to add employee is full
-     * @param request
-     * @return true if all the fields are not empty
-     */
-    public Boolean checkFormIsFull(HttpServletRequest request){
->>>>>>> project-V1
         return  (!request.getParameter(FORM_ADD_NAME).isEmpty() 
                 && !request.getParameter(FORM_ADD_FIRSTNAME).isEmpty()  
                 && !request.getParameter(FORM_ADD_TELHOME).isEmpty()   
@@ -231,8 +223,6 @@ public class Controleur extends HttpServlet {
                 && !request.getParameter(FORM_ADD_EMAIL).isEmpty()  
                 );
     }
-    
-<<<<<<< HEAD
     public Boolean checkFormModIsFull(HttpServletRequest request){
         return  (!request.getParameter(FORM_MOD_NAME).isEmpty() 
                 && !request.getParameter(FORM_MOD_FIRSTNAME).isEmpty()  
@@ -245,17 +235,6 @@ public class Controleur extends HttpServlet {
                 && !request.getParameter(FORM_MOD_EMAIL).isEmpty()  
                 );
     }
-    
-=======
-    /**
-     * return one employee details
-     * @param request
-     * @param response
-     * @throws SQLException
-     * @throws ServletException
-     * @throws IOException 
-     */
->>>>>>> project-V1
     public void getDetailedEmployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String IdDetail = request.getParameter("employeId");
         Connection dbConn = DataAccess.DBConnect();
