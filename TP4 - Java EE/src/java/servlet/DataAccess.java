@@ -20,6 +20,11 @@ import java.util.logging.Logger;
  */
 class DataAccess {
     
+        /**
+         * connection to the DB
+         * @return
+         * @throws SQLException 
+         */
         public static Connection DBConnect() throws SQLException{
             
             String dbUrl = "";
