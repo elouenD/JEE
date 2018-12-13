@@ -10,14 +10,21 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>JSP Page</title>
     </head>
     <body>
-        <div class="container">
+        <div>
+           <h1 style="margin:.5rem;float:left;">Page Ajout</h1>
+           <form method="post" action="Controleur">
+            <button style="margin:1rem;float:right;" class="btn btn-outline-secondary" name="action" value="Deconnect" type="submit"><i class="fa fa-power-off"></i></button> 
+           </form>
+        </div>
+        <div class="container" style="padding-top: 5rem">
             <% if(request.getAttribute("kMessageAdd") != null) {%>
                 <div class="error" id="errorMessage" style="color: red;text-align: center;margin-top: 20px;"><%=request.getAttribute("kMessageAdd")%></div>
             <%}%>
-            <form>
+            <form method="post" action="Controleur">
             <!-- NOM -->
             <div class="form-group row">
               <label for="nom" class="col-sm-2 col-form-label">Nom</label>

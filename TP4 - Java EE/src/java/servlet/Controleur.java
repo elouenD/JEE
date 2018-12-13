@@ -86,6 +86,20 @@ public class Controleur extends HttpServlet {
                                 getHomePage( request, response );
                             }
                             break;
+                            
+                        case "Modify":
+                            IdDetail = (String) request.getSession().getAttribute("employeId");
+                            if(IdDetail != null){
+                                modEmploye( request, response , IdDetail);
+                            }else{
+                                getHomePage( request, response );
+                            }
+                            break;
+                            
+                        case "Deconnect":
+                            request.getSession().setAttribute("kConnect", false);
+                            this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
+                            break;
                           
                         default :
                             this.getServletContext().getRequestDispatcher( "/WEB-INF/index.jsp" ).forward( request, response );
@@ -104,7 +118,7 @@ public class Controleur extends HttpServlet {
     public void addEmploye(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         String message;
         
-        if(checkFormIsFull(request)){
+        if(checkFormAddIsFull(request)){
             try{
                 try{
                     Connection dbConn = DataAccess.DBConnect();
@@ -140,7 +154,47 @@ public class Controleur extends HttpServlet {
         }
     }
     
-    public Boolean checkFormIsFull(HttpServletRequest request){
+    public void modEmploye(HttpServletRequest request, HttpServletResponse response, String idEmploye) throws SQLException, ServletException, IOException{
+        String message;
+        
+        if(checkFormModIsFull(request)){
+            try{
+                try{
+                    Connection dbConn = DataAccess.DBConnect();
+                    PreparedStatement prepared;
+                    prepared = dbConn.prepareStatement(DB_REQUEST_MODIFY_EMPLOYEE);
+                    prepared.setString(1,request.getParameter(FORM_MOD_NAME));
+                    prepared.setString(2,request.getParameter(FORM_MOD_FIRSTNAME));
+                    prepared.setString(3,request.getParameter(FORM_MOD_TELHOME));
+                    prepared.setString(4,request.getParameter(FORM_MOD_TELMOB));
+                    prepared.setString(5,request.getParameter(FORM_MOD_TELPRO));
+                    prepared.setString(6,request.getParameter(FORM_MOD_ADDRESS));
+                    prepared.setString(7,request.getParameter(FORM_MOD_POSTAL_CODE));
+                    prepared.setString(8,request.getParameter(FORM_MOD_CITY));
+                    prepared.setString(9,request.getParameter(FORM_MOD_EMAIL));
+                    prepared.setString(10,idEmploye);
+                    prepared.execute();
+                    message = "Employé Modifié !";
+                }
+                catch(Exception e){
+                    message = "Echec de la modification !";
+                }
+                ArrayList<Employees> ListeEmployes = this.getEmployees();
+                request.getSession().setAttribute("kEmployees", ListeEmployes);
+                request.setAttribute("kMessage", message);
+                this.getServletContext().getRequestDispatcher( "/WEB-INF/bienvenue.jsp" ).forward( request, response );
+            } catch(Exception e) {
+                
+            }
+        }else{
+            message = "Merci de remplir tous les champs avant de modifier un employé.";
+            request.setAttribute("kMessageMod", message);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/detailed_employee.jsp" )
+                            .forward(request, response);
+        }
+    }
+    
+    public Boolean checkFormAddIsFull(HttpServletRequest request){
         return  (!request.getParameter(FORM_ADD_NAME).isEmpty() 
                 && !request.getParameter(FORM_ADD_FIRSTNAME).isEmpty()  
                 && !request.getParameter(FORM_ADD_TELHOME).isEmpty()   
@@ -150,6 +204,19 @@ public class Controleur extends HttpServlet {
                 && !request.getParameter(FORM_ADD_POSTAL_CODE).isEmpty()  
                 && !request.getParameter(FORM_ADD_CITY).isEmpty()  
                 && !request.getParameter(FORM_ADD_EMAIL).isEmpty()  
+                );
+    }
+    
+    public Boolean checkFormModIsFull(HttpServletRequest request){
+        return  (!request.getParameter(FORM_MOD_NAME).isEmpty() 
+                && !request.getParameter(FORM_MOD_FIRSTNAME).isEmpty()  
+                && !request.getParameter(FORM_MOD_TELHOME).isEmpty()   
+                && !request.getParameter(FORM_MOD_TELMOB).isEmpty()  
+                && !request.getParameter(FORM_MOD_TELPRO).isEmpty()  
+                && !request.getParameter(FORM_MOD_ADDRESS).isEmpty()  
+                && !request.getParameter(FORM_MOD_POSTAL_CODE).isEmpty()  
+                && !request.getParameter(FORM_MOD_CITY).isEmpty()  
+                && !request.getParameter(FORM_MOD_EMAIL).isEmpty()  
                 );
     }
     
@@ -175,6 +242,7 @@ public class Controleur extends HttpServlet {
         }
         //request.setAttribute("kEmployees", employeeDetail);
         request.getSession().setAttribute("kEmployees", employeeDetail);
+        request.getSession().setAttribute("employeId", IdDetail);
         
         this.getServletContext().getRequestDispatcher( "/WEB-INF/detailed_employee.jsp" ).forward( request, response );
 
@@ -232,6 +300,7 @@ public class Controleur extends HttpServlet {
 
         //boucle for ‡ la place du if, si connBeans contient plusieurs lignes ?
             if ( (user.getLogin().equals(connBeans.getDbLogin())) && (user.getMdp().equals(connBeans.getDbMdp())) ){
+                request.getSession().setAttribute("kConnect", true);
                 ArrayList<Employees> ListeEmployes = this.getEmployees();
                 request.getSession().setAttribute("kEmployees", ListeEmployes);
                 if (!ListeEmployes.isEmpty()){

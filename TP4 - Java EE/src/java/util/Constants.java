@@ -18,6 +18,7 @@ public class Constants {
     public static final String DB_REQUEST_ADD_EMPLOYEE = "INSERT INTO EMPLOYES (NOM,PRENOM,TELDOM,TELPORT,TELPRO,ADRESSE,CODEPOSTAL,VILLE,EMAIL) VALUES (?,?,?,?,?,?,?,?,?)";
     public static final String DB_REQUEST_DELETE_EMPLOYEE = "DELETE FROM EMPLOYES WHERE ID =";
     public static final String DB_REQUEST_DETAILS_EMPLOYEE = "SELECT * FROM EMPLOYES WHERE ID =";
+    public static final String DB_REQUEST_MODIFY_EMPLOYEE = "UPDATE EMPLOYES SET NOM = ?,PRENOM = ?,TELDOM = ?,TELPORT = ?,TELPRO = ?,ADRESSE = ?,CODEPOSTAL = ?,VILLE = ?,EMAIL = ? WHERE ID = ?";
     
     // JSP PAGE
     public static final String INDEX_PAGE = "index.jsp";
@@ -39,6 +40,18 @@ public class Constants {
     public static final String FORM_ADD_CITY = "villeAddEmploye";
     public static final String FORM_ADD_EMAIL = "emailAddEmploye";
     public static final String FORM_ADD_ACTION = "add";
+    
+        // MOD FORM
+    public static final String FORM_MOD_NAME = "nomModEmploye";
+    public static final String FORM_MOD_FIRSTNAME = "prenomModEmploye";
+    public static final String FORM_MOD_TELHOME = "telDomModEmploye";
+    public static final String FORM_MOD_TELMOB = "telMobModEmploye";
+    public static final String FORM_MOD_TELPRO = "telProModEmploye";
+    public static final String FORM_MOD_ADDRESS = "adresseModEmploye";
+    public static final String FORM_MOD_POSTAL_CODE = "codePostalModEmploye";
+    public static final String FORM_MOD_CITY = "villeModEmploye";
+    public static final String FORM_MOD_EMAIL = "emailModEmploye";
+    public static final String FORM_MOD_ACTION = "modify";
     
     public static final String RETURN_TO_LIST_ACTION = "returnToList";
     
