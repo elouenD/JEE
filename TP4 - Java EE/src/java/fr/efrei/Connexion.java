@@ -13,19 +13,35 @@ public class Connexion {
      private String dbLogin;
      private String dbMdp;
      
+     /**
+      * 
+      * @return dbLogin
+      */
      public String getDbLogin(){
          return this.dbLogin;
      }
      
+     /**
+      * 
+      * @return dbMdp
+      */
      public String getDbMdp(){
          return this.dbMdp;
      }
      
-     public void setDbLogin(String login){
-         this.dbLogin = login;
+     /**
+      * set la valeur de dbLogin
+      * @param dbLogin 
+      */
+     public void setDbLogin(String dbLogin){
+         this.dbLogin = dbLogin;
      }
      
-     public void setDbMdp(String mdp){
-         this.dbMdp = mdp;
+     /**
+      * set la valeur de dbMdp
+      * @param dbMdp 
+      */
+     public void setDbMdp(String dbMdp){
+         this.dbMdp = dbMdp;
      }
 }
